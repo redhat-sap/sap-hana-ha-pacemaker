@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Red Hat SAP Community of Practice
+  description: HA configuration of pacemaker for SAP HANA and SAP Netweaver based applications
+  license: GPLv3
+  min_ansible_version: 2.9
+  platforms:
+  - name: EL
+    versions: [ 7, 8 ]
+
+  galaxy_tags: [ 'sap', 'pacemaker', 'hana', 'netweaver', 'ha', 'replication' ]
+
+dependencies: []
