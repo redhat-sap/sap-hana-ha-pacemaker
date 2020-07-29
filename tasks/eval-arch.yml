@@ -1,0 +1,12 @@
+---
+- name: Set fact for repositories to be used depending on the host architecture
+  set_fact:
+    sap_rhsm_e4s_repos: "{{ sap_rhsm_e4s_repos_x86_64 }}"
+    sap_rhsm_standard_repos: "{{ sap_rhsm_standard_repos_x86_64 }}"
+  when: ansible_architecture == "x86_64"
+
+- name: Set fact for repositories to be used depending on the host architecture
+  set_fact:
+    sap_rhsm_e4s_repos: "{{ sap_rhsm_e4s_repos_ppc64le }}"
+    sap_rhsm_standard_repos: "{{ sap_rhsm_standard_repos_ppc64le }}"
+  when: ansible_architecture == "ppc64le"

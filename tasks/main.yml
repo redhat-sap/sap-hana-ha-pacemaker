@@ -1,20 +1,8 @@
 ---
 
-- name: Create cluster user
-  user:
-    name: {{ sap_hana_ha_pacemaker_user }}
-    password: {{ sap_hana_ha_pacemaker_password }}
+- import_tasks: eval-arch.yml
+- import_tasks: enable-repos.yml
+- import_tasks: resource-agents-packages.yml
+- import_tasks: cluster-config.yml
 
-- name: Enable cluster services
-  service: pcsd
-  state: started
-  service: pcsd
-  state: started
-  service: corosync
-  state: started
-  service: pacemaker
-  state: started
-
-- name: Grant nodes access to cluster
-  command: pcs cluster auth {{ sap_hana_ha_pacemaker_node1 }} {{ sap_hana_ha_pacemaker_node2 }}
     
