@@ -1,11 +1,11 @@
 ---
 
 # Evaluate whether to use e4s repositories or not
-- name: Ensure 'sap_rhsm_repos' exists and points to the correct repository list
+- name: Ensure 'sap_hana_ha_pacemaker_repos' exists and points to the correct repository list
   set_fact:
-    sap_rhsm_repos: "{{ (sap_rhsm_use_e4s) | ternary(sap_rhsm_e4s_repos, sap_rhsm_standard_repos) }}"
+    sap_hana_ha_pacemaker_repos: "{{ (sap_hana_ha_pacemaker_use_e4s) | ternary(sap_hana_ha_pacemaker_e4s_repos, sap_hana_ha_pacemaker_standard_repos) }}"
 
 - name: Ensure required repos for RHEL HA are enabled
   rhsm_repository:
-    name: "{{ sap_rhsm_repos }}"
+    name: "{{ sap_hana_ha_pacemaker_repos }}"
     state: enabled

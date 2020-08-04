@@ -1,0 +1,14 @@
+---
+
+- name: Ensure required packages for Resource Agents are installed
+  yum:
+    name: 
+      - resource-agents-sap-hana
+      - pcs
+      - pacemaker 
+      - fence-agents-all
+    state: present
+
+
+
+

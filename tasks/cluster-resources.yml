@@ -1,0 +1,104 @@
+---
+
+- name: Ensure Cluster is in maintenance mode
+  command: pcs property set maintenance-mode=true
+  register: maintenance_cluster
+  changed_when: "'error' not in maintenance_cluster.stdout"
+  run_once: true
+
+- name: Ensure stickiness is configured properly
+  command: pcs resource defaults resource-stickiness=1000
+  register: rconfig
+  changed_when: "'Defaults do not apply to resource' in rconfig.stdout"
+  when: sap_hana_ha_pacemaker_stickiness
+
+- name: Ensure migration threshold is configured properly
+  command: pcs resource defaults migration-threshold=5000
+  register: rconfig
+  changed_when: "'Defaults do not apply to resource' in rconfig.stdout"
+  when: sap_hana_ha_pacemaker_threshold
+  
+- name: Create SAP HANA topology
+  shell: |
+    pcs resource create SAPHanaTopology_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} \
+    SAPHanaTopology SID={{ sap_hana_ha_pacemaker_hana_sid }} InstanceNumber={{ sap_hana_ha_pacemaker_hana_instance_number }} \
+    op start timeout=600 \
+    op stop timeout=300 \
+    op monitor interval=10 timeout=600 \
+    clone clone-max=2 clone-node-max=1 interleave=true
+  register: create_resource
+  changed_when: "'Assumed agent name' in create_resource.stdout"
+  run_once: true
+
+- name: Create SAP HANA resource agent
+  shell: |
+    pcs resource create SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} \
+    SAPHana SID={{ sap_hana_ha_pacemaker_hana_sid }} InstanceNumber={{ sap_hana_ha_pacemaker_hana_instance_number }} \
+    PREFER_SITE_TAKEOVER=true DUPLICATE_PRIMARY_TIMEOUT=7200 AUTOMATED_REGISTER=true \
+    op start timeout=3600 \
+    op stop timeout=3600 \
+    op monitor interval=61 role="Slave" timeout=700 \
+    op monitor interval=59 role="Master" timeout=700 \
+    op promote timeout=3600 \
+    op demote timeout=3600 \
+    promotable meta notify=true clone-max=2 clone-node-max=1 interleave=true
+  register: create_resource
+  changed_when: "'Assumed agent name' in create_resource.stdout"
+  run_once: true
+
+- name: Create Virtual IP resource
+  shell: |
+    pcs resource create vip_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}  \
+    IPaddr2 ip="{{ sap_hana_ha_pacemaker_vip }}"
+  register: create_resource
+  changed_when: "'Assumed agent name' in create_resource.stdout"
+  run_once: true
+
+- name: Create Cluster constrains
+  shell: |
+    pcs constraint order SAPHanaTopology_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone  \
+    then SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone symmetrical=false
+  register: create_constrain
+  changed_when: "'Adding SAPHanaTopology' in create_constrain.stdout"
+  run_once: true
+
+- name: Colocate Cluster constrain
+  shell: |
+    pcs constraint colocation add vip_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} \
+    with master SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone 2000
+  register: colocate_constrain
+  changed_when: "'error' not in colocate_constrain.stdout"
+  run_once: true
+
+- name: Create second Virtual IP resource for Active/Read-Enabled HANA on the secondary node
+  shell: |
+    pcs resource create vip2_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} \
+    IPaddr2 ip="{{ sap_hana_ha_pacemaker_secondary_vip }}"
+  when:
+    - sap_hana_ha_pacemaker_secondary_read
+  register: create_resource
+  changed_when: "'Assumed agent name' in create_resource.stdout"
+  run_once: true
+
+- name: Colocate Cluster constrain for Active/Read-Enabled HANA on the secondary node
+  shell: |
+    pcs constraint colocation add vip2_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} \
+    with slave SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone 2000
+  when:
+    - sap_hana_ha_pacemaker_secondary_read
+  register: colocate_constrain
+  changed_when: "'error' not in colocate_constrain.stdout"
+  run_once: true
+
+## This is a temporary thing until different stonith methods are configured
+- name: Disable stonith until proper methods are added to the role
+  command: pcs property set stonith-enabled=false
+  register: stonith
+  changed_when: "'error' not in stonith.stdout"
+  run_once: true
+
+- name: Ensure Cluster is NOT in maintenance mode
+  command: pcs property set maintenance-mode=false
+  register: maintenance_cluster
+  changed_when: "'error' not in maintenance_cluster.stdout"
+  run_once: true
