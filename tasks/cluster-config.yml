@@ -8,8 +8,8 @@
 
 - name: Create SAP HANA topology
   shell: |
-    pcs resource create SAPHanaTopology_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }} && \
-    SAPHanaTopology SID={{ sap_hana_deployment_hana_sid }} InstanceNumber={{ sap_hana_deployment_hana_instance_number }} && \
+    pcs resource create SAPHanaTopology_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} && \
+    SAPHanaTopology SID={{ sap_hana_ha_pacemaker_hana_sid }} InstanceNumber={{ sap_hana_ha_pacemaker_hana_instance_number }} && \
     op start timeout=600 && \
     op stop timeout=300 && \
     op monitor interval=10 timeout=600 && \
@@ -17,8 +17,8 @@
 
 - name: Create SAP HANA resource agent
   shell: |
-    pcs resource create SAPHana_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }} && \
-    SAPHana SID={{ sap_hana_deployment_hana_sid }} InstanceNumber={{ sap_hana_deployment_hana_instance_number }} && \
+    pcs resource create SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} && \
+    SAPHana SID={{ sap_hana_ha_pacemaker_hana_sid }} InstanceNumber={{ sap_hana_ha_pacemaker_hana_instance_number }} && \
     PREFER_SITE_TAKEOVER=true DUPLICATE_PRIMARY_TIMEOUT=7200 AUTOMATED_REGISTER=true && \
     op start timeout=3600 && \
     op stop timeout=3600 && \
@@ -30,27 +30,27 @@
 
 - name: Create Virtual IP resource
   shell: |
-    pcs resource create vip_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }} && \
-    IPaddr2 ip="{{ sap-hana-ha-pacemaker-vip }}"
+    pcs resource create vip_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} && \
+    IPaddr2 ip="{{ sap_hana_ha_pacemaker_vip }}"
 
 - name: Create Cluster constrains
   shell: |
-    pcs constraint order SAPHanaTopology_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }}-clone && \
-    then SAPHana_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }}-clone symmetrical=false
+    pcs constraint order SAPHanaTopology_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone && \
+    then SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone symmetrical=false
 
 - name: Colocate Cluster constrain
   shell: |
-    pcs constraint colocation add vip_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }} && \
-    with master SAPHana_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }}-clone 2000
+    pcs constraint colocation add vip_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} && \
+    with master SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone 2000
 
 - name: Create second Virtual IP resource for Active/Read-Enabled HANA on the secondary node
   shell: |
-    pcs resource create vip2_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }} && \
-    IPaddr2 ip="{{ sap-hana-ha-pacemaker-secondary-vip }}"
+    pcs resource create vip2_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} && \
+    IPaddr2 ip="{{ sap_hana_ha_pacemaker_secondary_vip }}"
   when:
-    - sap-hana-ha-pacemaker-secondary-read
+    - sap_hana_ha_pacemaker_secondary_read
 
 - name: Colocate Cluster constrain for Active/Read-Enabled HANA on the secondary node
   shell: |
-    pcs constraint colocation add vip2_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }} && \
-    with slave SAPHana_{{ sap_hana_deployment_hana_sid }}_{{ sap_hana_deployment_hana_instance_number }}-clone 2000
+    pcs constraint colocation add vip2_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} && \
+    with slave SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone 2000

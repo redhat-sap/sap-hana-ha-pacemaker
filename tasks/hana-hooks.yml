@@ -9,7 +9,7 @@
     path: /hana/shared/myHooks
     state: directory
     mode: '0755'
-    owner: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+    owner: "{{ sap_hana_ha_pacemaker_hana_sid | lower }}adm"
     group: sapsys
 
 - name: Ensure SAPHanaSR hook is copied to the new location
@@ -21,7 +21,7 @@
 - name: Ensure global.ini file is updated
   copy:
     src: "{{ role_path }}/files/global.ini"
-    dest: "/hana/shared/{{ sap_hana_hsr_hana_sid }}/global/hdb/custom/config/global.ini"
+    dest: "/hana/shared/{{ sap_hana_ha_pacemaker_hana_sid }}/global/hdb/custom/config/global.ini"
     force: yes
 
 - name: Ensure sudo configuration is updated
@@ -32,11 +32,11 @@
 
 - name: Ensure HANA instances are started
   shell: |
-      /usr/sap/{{ sap_hana_hsr_hana_sid | upper }}/HDB{{ sap_hana_hsr_hana_instance_number }}/HDB start
+      /usr/sap/{{ sap_hana_ha_pacemaker_hana_sid | upper }}/HDB{{ sap_hana_ha_pacemaker_hana_instance_number }}/HDB start
   args:
     executable: /bin/bash
   become: yes
-  become_user: "{{ sap_hana_hsr_hana_sid | lower }}adm"
+  become_user: "{{ sap_hana_ha_pacemaker_hana_sid | lower }}adm"
   register: startinstance
   changed_when: "'StartSystem' in startinstance.stdout"
 

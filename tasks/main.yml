@@ -3,6 +3,7 @@
 - import_tasks: eval-arch.yml
 - import_tasks: enable-repos.yml
 - import_tasks: resource-agents-packages.yml
+- import_tasks: hana-hooks.yml
 - import_tasks: cluster-config.yml
 
     
