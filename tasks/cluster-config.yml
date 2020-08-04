@@ -55,6 +55,3 @@
   register: start_cluster
   changed_when: "'Starting Cluster' in start_cluster.stdout"
   run_once: true
-
-
-

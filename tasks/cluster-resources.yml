@@ -17,7 +17,7 @@
   register: rconfig
   changed_when: "'Defaults do not apply to resource' in rconfig.stdout"
   when: sap_hana_ha_pacemaker_threshold
-  
+
 - name: Create SAP HANA topology
   shell: |
     pcs resource create SAPHanaTopology_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} \
