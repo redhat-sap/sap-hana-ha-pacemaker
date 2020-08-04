@@ -4,4 +4,3 @@
   yum:
     name: resource-agents-sap-hana
     state: present
-    
