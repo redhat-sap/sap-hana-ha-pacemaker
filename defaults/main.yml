@@ -10,4 +10,4 @@ sap_hana_ha_pacemaker_e4s_repos_x86_64: rhel-8-for-x86_64-highavailability-e4s-r
 sap_hana_ha_pacemaker_standard_repos_ppc64le: rhel-8-for-ppc64le-highavailability-rpms
 sap_hana_ha_pacemaker_e4s_repos_ppc64le: rhel-8-for-ppc64le-highavailability-e4s-rpm
 
-sap_hana_ha_pacemaker_hacluster_cluster_name: "hana_cluster"
+sap_hana_ha_pacemaker_cluster_name: "hana_cluster"
