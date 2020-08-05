@@ -1,1 +1,13 @@
-sap-hana-ha-pacemaker-secondary-read: false
+sap_hana_ha_pacemaker_secondary_read: false
+sap_hana_ha_pacemaker_configure_firewall: false
+sap_hana_ha_pacemaker_stickiness: false
+sap_hana_ha_pacemaker_threshold: false
+
+sap_hana_ha_pacemaker_use_e4s: true
+
+sap_hana_ha_pacemaker_standard_repos_x86_64: rhel-8-for-x86_64-highavailability-rpms
+sap_hana_ha_pacemaker_e4s_repos_x86_64: rhel-8-for-x86_64-highavailability-e4s-rpms
+sap_hana_ha_pacemaker_standard_repos_ppc64le: rhel-8-for-ppc64le-highavailability-rpms
+sap_hana_ha_pacemaker_e4s_repos_ppc64le: rhel-8-for-ppc64le-highavailability-e4s-rpm
+
+sap_hana_ha_pacemaker_cluster_name: "hana_cluster"

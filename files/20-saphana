@@ -1,3 +1,0 @@
-Cmnd_Alias SOK   = /usr/sbin/crm_attribute -n hana_RH2_glob_srHook -v SOK -t crm_config -s SAPHanaSR
-Cmnd_Alias SFAIL = /usr/sbin/crm_attribute -n hana_RH2_glob_srHook -v SFAIL -t crm_config -s SAPHanaSR
-rh2adm ALL=(ALL) NOPASSWD: SOK, SFAIL

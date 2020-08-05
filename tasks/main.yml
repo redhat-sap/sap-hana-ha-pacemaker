@@ -2,7 +2,6 @@
 
 - import_tasks: eval-arch.yml
 - import_tasks: enable-repos.yml
-- import_tasks: resource-agents-packages.yml
+- import_tasks: software-setup.yml
 - import_tasks: cluster-config.yml
-
-    
+- import_tasks: cluster-resources.yml
