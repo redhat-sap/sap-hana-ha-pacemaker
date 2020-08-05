@@ -54,20 +54,20 @@
   changed_when: "'Assumed agent name' in create_resource.stdout"
   run_once: true
 
-- name: Create Cluster constrains
+- name: Create Cluster constraint
   shell: |
     pcs constraint order SAPHanaTopology_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone  \
     then SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone symmetrical=false
-  register: create_constrain
-  changed_when: "'Adding SAPHanaTopology' in create_constrain.stdout"
+  register: create_constraint
+  changed_when: "'Adding SAPHanaTopology' in create_constraint.stdout"
   run_once: true
 
-- name: Colocate Cluster constrain
+- name: Colocate Cluster constraint
   shell: |
     pcs constraint colocation add vip_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} \
     with master SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone 2000
-  register: colocate_constrain
-  changed_when: "'error' not in colocate_constrain.stdout"
+  register: colocate_constraint
+  changed_when: "'error' not in colocate_constraint.stdout"
   run_once: true
 
 - name: Create second Virtual IP resource for Active/Read-Enabled HANA on the secondary node
