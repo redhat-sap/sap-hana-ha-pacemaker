@@ -33,6 +33,23 @@ You can use the [redhat_sap.sap_rhsm](https://galaxy.ansible.com/redhat_sap/sap_
 |sap_hana_ha_pacemaker_threshold|Wheter to configure migration-threshold|no (default false)|
 |sap_hana_ha_pacemaker_use_e4s|Whether to use 'e4s' repositories or not|no (default true)|
 
+### STONITH fencing
+The following variables are common to all fencing devices (except those on hyperscalers)
+
+|sap_hana_ha_pacemaker_fencing_device.name|Name of the fencing device|yes|
+|sap_hana_ha_pacemaker_fencing_device.type|Fencing device type|yes|This is a list of the most common fencing devices:
+fence_vmware_soap - VMWare
+fence_ipmilan - IPMI
+fence_ilo4_ssh - HP ILO
+fence_rhevm - RHV
+fence_azure_arm - Azure|
+|sap_hana_ha_pacemaker_fencing_device.ip|IP address of the fencing device|yes|
+|sap_hana_ha_pacemaker_fencing_device.user|Username to connect to the fencing device|yes|
+|sap_hana_ha_pacemaker_fencing_device.pwd|Password to connect to the fencing device|yes|
+|sap_hana_ha_pacemaker.host_list|List of nodes controlled by the fencing device|yes (if sap_hana_ha_pacemaker_host_map_list is not specified)|
+|sap_hana_ha_pacemaker.host_map_list|Mapping of the hostnames of the nodes that will be controlled by the fencing device to the names or IPs with which they are registered to the fencing device (normally VMs are registered to the fencing device with the VM name instead of the hostname. If the hosts are registered with their actual hostname use sap_hana_ha_pacemaker_host_list instead)|yes (if sap_hana_ha_pacemaker_host_list is not specified)|
+
+
 ## Example Playbook
 
 ```yaml
@@ -54,6 +71,17 @@ sap_hana_ha_pacemaker_hacluster_node1_fqdn: hana-node1.test.local
 sap_hana_ha_pacemaker_hacluster_node2_fqdn: hana-node2.test.local
 sap_hana_ha_pacemaker_hacluster_node1_ip: 192.168.47.21
 sap_hana_ha_pacemaker_hacluster_node2_ip: 192.168.47.22
+sap_hana_ha_pacemaker_fencing_device_ip: 192.168.47.11
+sap_hana_ha_pacemaker_fencing_device:
+  name: "myfencingdevice"
+  type: "fence_ipmilan"
+  user: "fencing_user"
+  pwd: "Mysecretpassword"
+  host_list: "host1.example.com,host2.example.com"
+  host_map_list: "host1.example.com:VM001;host2.example.com:192.168.47.50"
+
+
+
 
 ## License
 

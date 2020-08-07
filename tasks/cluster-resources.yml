@@ -80,7 +80,7 @@
   changed_when: "'Assumed agent name' in create_resource.stdout"
   run_once: true
 
-- name: Colocate Cluster constrain for Active/Read-Enabled HANA on the secondary node
+- name: Colocate Cluster constraint for Active/Read-Enabled HANA on the secondary node
   shell: |
     pcs constraint colocation add vip2_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} \
     with slave SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone 2000
@@ -88,13 +88,6 @@
     - sap_hana_ha_pacemaker_secondary_read
   register: colocate_constrain
   changed_when: "'error' not in colocate_constrain.stdout"
-  run_once: true
-
-## This is a temporary thing until different stonith methods are configured
-- name: Disable stonith until proper methods are added to the role
-  command: pcs property set stonith-enabled=false
-  register: stonith
-  changed_when: "'error' not in stonith.stdout"
   run_once: true
 
 - name: Ensure Cluster is NOT in maintenance mode

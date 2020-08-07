@@ -5,3 +5,4 @@
 - import_tasks: software-setup.yml
 - import_tasks: cluster-config.yml
 - import_tasks: cluster-resources.yml
+- import_tasks: fencing-config.yml
