@@ -29,7 +29,7 @@
 - name: Authenticate the cluster Nodes
   command: |
     pcs host auth \
-    {{ sap_hana_ha_pacemaker_hacluster_node1_fqdn }} {{ sap_hana_ha_pacemaker_hacluster_node2_fqdn }} \
+    {{ sap_hana_ha_pacemaker_node1_fqdn }} {{ sap_hana_ha_pacemaker_node2_fqdn }} \
     -u hacluster -p {{ sap_hana_ha_pacemaker_hacluster_password }}
   register: auth_cluster
   changed_when: "'Authorized' in auth_cluster.stdout"
@@ -37,9 +37,9 @@
 - name: Create RHEL HA Cluster
   command: |
     pcs cluster setup \
-    {{ sap_hana_ha_pacemaker_hacluster_cluster_name }} \
-    {{ sap_hana_ha_pacemaker_hacluster_node1_fqdn }} \
-    {{ sap_hana_ha_pacemaker_hacluster_node2_fqdn }} \
+    {{ sap_hana_ha_pacemaker_cluster_name }} \
+    {{ sap_hana_ha_pacemaker_node1_fqdn }} \
+    {{ sap_hana_ha_pacemaker_node2_fqdn }} \
   register: create_cluster
   changed_when: "'Cluster has been successfully set up' in create_cluster.stdout"
   run_once: true

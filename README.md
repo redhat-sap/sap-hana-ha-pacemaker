@@ -50,10 +50,10 @@ sap_hana_ha_pacemaker_hana_sid: RH1
 sap_hana_ha_pacemaker_hana_instance_number: "00"
 sap_hana_ha_pacemaker_vip: 192.168.47.100
 sap_hana_ha_pacemaker_hacluster_password: "Mysecretpassword"
-sap_hana_ha_pacemaker_hacluster_node1_fqdn: hana-node1.test.local
-sap_hana_ha_pacemaker_hacluster_node2_fqdn: hana-node2.test.local
-sap_hana_ha_pacemaker_hacluster_node1_ip: 192.168.47.21
-sap_hana_ha_pacemaker_hacluster_node2_ip: 192.168.47.22
+sap_hana_ha_pacemaker_node1_fqdn: hana-node1.test.local
+sap_hana_ha_pacemaker_node2_fqdn: hana-node2.test.local
+sap_hana_ha_pacemaker_node1_ip: 192.168.47.21
+sap_hana_ha_pacemaker_node2_ip: 192.168.47.22
 
 ## License
 
