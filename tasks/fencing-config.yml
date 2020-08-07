@@ -6,8 +6,8 @@
 
 - name: Create stonith device without host mapping
   command: >
-    pcs stonith create {{ sap_hana_ha_pacemaker_fencing_device.name }} {{ sap_hana_ha_pacemaker_fencing_device.type }} \
-    ipaddr={{ sap_hana_ha_pacemaker_fencing_device.ip }} login={{ sap_hana_ha_pacemaker_fencing_device.user }} \  
+    pcs stonith create {{ sap_hana_ha_pacemaker_fencing_device.name }} {{ sap_hana_ha_pacemaker_fencing_device.type }}
+    ipaddr={{ sap_hana_ha_pacemaker_fencing_device.ip }} login={{ sap_hana_ha_pacemaker_fencing_device.user }}
     passwd={{ sap_hana_ha_pacemaker_fencing_device.pwd }}  pcmk_host_list={{ sap_hana_ha_pacemaker.host_list }} op monitor interval=30
   when:
     - sap_hana_ha_pacemaker_fencing_device_type != "fence_azure_arm"
@@ -18,8 +18,8 @@
 
 - name: Create stonith device with host mapping
   command: >
-    pcs stonith create {{ sap_hana_ha_pacemaker_fencing_device.name}} fence_ipmilan 
-    ipaddr={{ sap_hana_ha_pacemaker_fencing_device.ip }} login={{ sap_hana_ha_pacemaker_fencing_device.user }}  
+    pcs stonith create {{ sap_hana_ha_pacemaker_fencing_device.name}} fence_ipmilan
+    ipaddr={{ sap_hana_ha_pacemaker_fencing_device.ip }} login={{ sap_hana_ha_pacemaker_fencing_device.user }}
     passwd={{ sap_hana_ha_pacemaker_fencing_device.pwd }}  pcmk_host_map={{ sap_hana_ha_pacemaker.host_list_map }} op monitor interval=30
   when:
     - sap_hana_ha_pacemaker_fencing_device.type != "fence_azure_arm"
