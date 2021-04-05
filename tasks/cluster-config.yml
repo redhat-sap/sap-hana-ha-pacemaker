@@ -34,7 +34,7 @@
   register: auth_cluster
   changed_when: "'Authorized' in auth_cluster.stdout"
   vars:
-    _subject: "{{ 'cluster' if ansible_lsb.major_release|int == 7 else 'host' }}"
+    _subject: "{{ 'cluster' if ansible_facts['distribution_major_version'] | int == 7 else 'host' }}"
 
 - name: Create RHEL HA Cluster
   command: |
