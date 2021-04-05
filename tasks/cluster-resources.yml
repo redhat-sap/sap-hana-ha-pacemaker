@@ -41,7 +41,7 @@
     op monitor interval=59 role="Master" timeout=700 \
     op promote timeout=3600 \
     op demote timeout=3600 \
-    promotable meta notify=true clone-max=2 clone-node-max=1 interleave=true
+    master notify=true clone-max=2 clone-node-max=1 interleave=true
   register: create_resource
   changed_when: "'Assumed agent name' in create_resource.stdout"
   run_once: true
@@ -57,7 +57,7 @@
 - name: Create Cluster constraint
   shell: |
     pcs constraint order SAPHanaTopology_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone  \
-    then SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone symmetrical=false
+    then SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-master symmetrical=false
   register: create_constraint
   changed_when: "'Adding SAPHanaTopology' in create_constraint.stdout"
   run_once: true
@@ -65,7 +65,7 @@
 - name: Colocate Cluster constraint
   shell: |
     pcs constraint colocation add vip_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }} \
-    with master SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-clone 2000
+    with master SAPHana_{{ sap_hana_ha_pacemaker_hana_sid }}_{{ sap_hana_ha_pacemaker_hana_instance_number }}-master 2000
   register: colocate_constraint
   changed_when: "'error' not in colocate_constraint.stdout"
   run_once: true
