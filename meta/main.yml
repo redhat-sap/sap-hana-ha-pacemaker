@@ -1,7 +1,7 @@
 galaxy_info:
   author: Red Hat SAP Community of Practice
   description: HA configuration of pacemaker for SAP HANA
-  license: GPLv3
+  license: Apache
   min_ansible_version: 2.9
   platforms:
   - name: EL
