@@ -3,10 +3,6 @@
     name: fence-agents-vmware-soap
     state: present
 
-- name: Set quorum votes
-  command: pcs quorum expected-votes 2
-  run_once: true
-
 - name: Allow concurrent fencing
   command: pcs property set concurrent-fencing=true
   run_once: true
@@ -31,13 +27,13 @@
   set_fact:
     password_frag: "passwd={{ sap_hana_ha_pacemaker_fencing_device.pwd }}"
   when:
-    - not( sap_hana_ha_pacemaker_fencing_device.use_pw_script )
+    - not( sap_hana_ha_pacemaker_fencing_device.password_file )
 
 - name: Set password fragment
   set_fact:
-    password_frag: "passwd_script=={{ sap_hana_ha_pacemaker_fencing_device.password_file }}"
+    password_frag: "passwd_script={{ sap_hana_ha_pacemaker_fencing_device.password_file }}"
   when:
-    - sap_hana_ha_pacemaker_fencing_device.use_pw_script
+    - sap_hana_ha_pacemaker_fencing_device.password_file
 
 - name: Create password script
   copy:
@@ -45,16 +41,16 @@
     content: 'echo "{{ sap_hana_ha_pacemaker_fencing_device.pwd }}"'
     mode: 0700
   when:
-    - sap_hana_ha_pacemaker_fencing_device.use_pw_script
+    - sap_hana_ha_pacemaker_fencing_device.password_file
   
 - name: Create stonith device without host mapping
   command: >
     pcs stonith create {{ sap_hana_ha_pacemaker_fencing_device.name }} {{ sap_hana_ha_pacemaker_fencing_device.type }}
     ipaddr={{ sap_hana_ha_pacemaker_fencing_device.ip }} login={{ sap_hana_ha_pacemaker_fencing_device.user }}
-    {{ password_frag }} pcmk_host_list={{ sap_hana_ha_pacemaker_fencing_device.host_list }} op monitor interval=30
+    {{ password_frag }} pcmk_host_list={{ sap_hana_ha_pacemaker_fencing_device.pcmk_host_list }} op monitor interval=30
   when:
     - sap_hana_ha_pacemaker_fencing_device.type != "fence_azure_arm"
-    - not( sap_hana_ha_pacemaker_fencing_device.host_list is none )
+    - not( sap_hana_ha_pacemaker_fencing_device.pcmk_host_list is none )
   register: stonith_device
   changed_when: "'error' not in stonith_device.stdout"
   run_once: true
@@ -63,10 +59,10 @@
   command: >
     pcs stonith create {{ sap_hana_ha_pacemaker_fencing_device.name }} {{ sap_hana_ha_pacemaker_fencing_device.type }}
     ipaddr={{ sap_hana_ha_pacemaker_fencing_device.ip }} login={{ sap_hana_ha_pacemaker_fencing_device.user }}
-    {{ password_frag }} pcmk_host_map={{ sap_hana_ha_pacemaker_fencing_device.host_map }} op monitor interval=30
+    {{ password_frag }} pcmk_host_map={{ sap_hana_ha_pacemaker_fencing_device.pcmk_host_map }} op monitor interval=30
   when:
     - sap_hana_ha_pacemaker_fencing_device.type != "fence_azure_arm"
-    - not( sap_hana_ha_pacemaker_fencing_device.host_map is none )
+    - not( sap_hana_ha_pacemaker_fencing_device.pcmk_host_map is none )
   register: stonith_device
   changed_when: "'error' not in stonith_device.stdout"
   run_once: true
