@@ -50,7 +50,7 @@ The following variables are common to all fencing devices (except those on hyper
 | sap_hana_ha_pacemaker_fencing_device.pcmk_host_list |                          List of nodes controlled by the fencing device                          |   yes *   |
 | sap_hana_ha_pacemaker_fencing_device.password_file  | Full path and filename of file to have 'password script' to use for fencing device configuration |    no     |
 | sap_hana_ha_pacemaker_fencing_device.pcmk_host_map  |                             Mapping of the hostnames/ip of the nodes                             |   yes*    |
-
+ 
 \* Must provide either a pcmk_host_list or a pcmk_host_map, per https://access.redhat.com/solutions/2619961 for a discussion on host_list vs host_map
 
 This is a list of the most common fencing devices:
@@ -93,10 +93,10 @@ sap_hana_ha_pacemaker_fencing_device:
 ```
 
 ## TODO
-
-Verify drivers other than fence_vmware_rest support passwd_script option
-Support >2 nodes
-Support >2 links
+* Fencing should perhaps be extracted to own role to share with redhat_sap.sap-netweaver-ha-pacemaker
+* Verify drivers other than fence_vmware_rest support passwd_script option
+* Support >2 nodes
+* Support >2 links
 
 ## License
 

@@ -1,8 +1,3 @@
-- name: Install fencing agents
-  yum:
-    name: fence-agents-vmware-soap
-    state: present
-
 - name: Allow concurrent fencing
   command: pcs property set concurrent-fencing=true
   run_once: true
@@ -13,8 +8,8 @@
 
 - name: Create password script
   copy:
-    dest: "{{ sap_hana_ha_pacemaker_passwd_file }}"
-    content: 'echo "xMSdo8etCM"'
+    dest: "{{ sap_hana_ha_pacemaker_fencing_device.password_file }}"
+    content: 'echo "{{ sap_hana_ha_pacemaker_fencing_device.pwd }}"'
     mode: 0700
 
 - name: Enable stonith
