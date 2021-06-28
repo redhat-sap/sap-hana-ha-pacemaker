@@ -15,23 +15,23 @@ You can use the [redhat_sap.sap_rhsm](https://galaxy.ansible.com/redhat_sap/sap_
 
 ### Role variables
 
-| variable | info | required? |
-|:--------:|:----:|:---------:|
-|sap_hana_ha_pacemaker_hana_sid|SAP HANA System ID|yes|
-|sap_hana_ha_pacemaker_hana_instance_number|Instance Number|yes, **it must be declared as a string** e.g. "00"|
-|sap_hana_ha_pacemaker_secondary_read|Configure HANA second Node as Active/Read-Enabled|no (default false)|
-|sap_hana_ha_pacemaker_vip|Virtual IP used for the HANA clustered service|yes|
-|sap_hana_ha_pacemaker_secondary_vip|Virtual IP used for the HANA clustered service when second Node is configured as Active/Read-Enabled|only if sap_hana_ha_pacemaker_secondary_read 'true'|
-|sap_hana_ha_pacemaker_configure_firewall|Wheter to configure firewall rules for RHEL HA|no (default false)|
-|sap_hana_ha_pacemaker_hacluster_password|Password to be set up for 'hacluster' uset|yes|
-|sap_hana_ha_pacemaker_cluster_name|Name to be given to the RHEL HA Cluster|no (default 'hana_cluster')
-|sap_hana_ha_pacemaker_node1_fqdn|Fully qualified domain name for FIRST node of the cluster used for heartbeat traffic|yes|
-|sap_hana_ha_pacemaker_node2_fqdn|Fully qualified domain name for SECOND node of the cluster used for heartbeat traffic|yes|
-|sap_hana_ha_pacemaker_node1_ip|IP if the FIRST node of the cluster used for heartbeat traffic|yes|
-|sap_hana_ha_pacemaker_node2_ip|IP if the SECOND node of the cluster used for heartbeat traffic|yes|
-|sap_hana_ha_pacemaker_stickiness|Wheter to configure resource-stickiness|no (default false)|
-|sap_hana_ha_pacemaker_threshold|Wheter to configure migration-threshold|no (default false)|
-|sap_hana_ha_pacemaker_use_e4s|Whether to use 'e4s' repositories or not|no (default true)|
+|                  variable                  |                                                 info                                                 |                      required?                      |
+| :----------------------------------------: | :--------------------------------------------------------------------------------------------------: | :-------------------------------------------------: |
+|       sap_hana_ha_pacemaker_hana_sid       |                                          SAP HANA System ID                                          |                         yes                         |
+| sap_hana_ha_pacemaker_hana_instance_number |                                           Instance Number                                            | yes, **it must be declared as a string** e.g. "00"  |
+|    sap_hana_ha_pacemaker_secondary_read    |                          Configure HANA second Node as Active/Read-Enabled                           |                 no (default false)                  |
+|         sap_hana_ha_pacemaker_vip          |                            Virtual IP used for the HANA clustered service                            |                         yes                         |
+|    sap_hana_ha_pacemaker_secondary_vip     | Virtual IP used for the HANA clustered service when second Node is configured as Active/Read-Enabled | only if sap_hana_ha_pacemaker_secondary_read 'true' |
+|  sap_hana_ha_pacemaker_configure_firewall  |                            Wheter to configure firewall rules for RHEL HA                            |                 no (default false)                  |
+|  sap_hana_ha_pacemaker_hacluster_password  |                              Password to be set up for 'hacluster' uset                              |                         yes                         |
+|     sap_hana_ha_pacemaker_cluster_name     |                               Name to be given to the RHEL HA Cluster                                |             no (default 'hana_cluster')             |
+|      sap_hana_ha_pacemaker_node1_fqdn      |         Fully qualified domain name for FIRST node of the cluster used for heartbeat traffic         |                         yes                         |
+|      sap_hana_ha_pacemaker_node2_fqdn      |        Fully qualified domain name for SECOND node of the cluster used for heartbeat traffic         |                         yes                         |
+|       sap_hana_ha_pacemaker_node1_ip       |                    IP if the FIRST node of the cluster used for heartbeat traffic                    |                         yes                         |
+|       sap_hana_ha_pacemaker_node2_ip       |                   IP if the SECOND node of the cluster used for heartbeat traffic                    |                         yes                         |
+|      sap_hana_ha_pacemaker_stickiness      |                               Wheter to configure resource-stickiness                                |                 no (default false)                  |
+|      sap_hana_ha_pacemaker_threshold       |                               Wheter to configure migration-threshold                                |                 no (default false)                  |
+|       sap_hana_ha_pacemaker_use_e4s        |                               Whether to use 'e4s' repositories or not                               |                  no (default true)                  |
 
 ### STONITH fencing
 The following variables are common to all fencing devices (except those on hyperscalers)
@@ -46,10 +46,12 @@ fence_azure_arm - Azure|
 |sap_hana_ha_pacemaker_fencing_device.ip|IP address of the fencing device|yes|
 |sap_hana_ha_pacemaker_fencing_device.user|Username to connect to the fencing device|yes|
 |sap_hana_ha_pacemaker_fencing_device.pwd|Password to connect to the fencing device|yes|
-|sap_hana_ha_pacemaker.host_list|List of nodes controlled by the fencing device|yes (if sap_hana_ha_pacemaker_host_map_list is not specified)|
-|sap_hana_ha_pacemaker.host_map_list|Mapping of the hostnames of the nodes that will be controlled by the fencing device to the names or IPs with which they are registered to the fencing device (normally VMs are registered to the fencing device with the VM name instead of the hostname. If the hosts are registered with their actual hostname use sap_hana_ha_pacemaker_host_list instead)|yes (if sap_hana_ha_pacemaker_host_list is not specified)|
+|sap_hana_ha_pacemaker_fencing_device.password_file|Full path and filename of file to have 'password script' to use for fencing device configuration|yes|
+|sap_hana_ha_pacemaker.host_list|List of nodes controlled by the fencing device|yes (if sap_hana_ha_pacemaker.host_map is not specified)|
+|sap_hana_ha_pacemaker.host_map|Mapping of the hostnames of the nodes that will be controlled by the fencing device to the names or IPs with which they are registered to the fencing device (normally VMs are registered to the fencing device with the VM name instead of the hostname. If the hosts are registered with their actual hostname use sap_hana_ha_pacemaker_host_list instead)|yes (if sap_hana_ha_pacemaker_host_list is not specified)|
 
 
+See: https://access.redhat.com/solutions/2619961 for a discussion on host_list vs host_map
 ## Example Playbook
 
 ```yaml
