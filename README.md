@@ -83,7 +83,7 @@ sap_hana_ha_pacemaker_fencing_device:
 
 ## License
 
-GPLv3
+Apache License 2.0
 
 ## Author Information
 
