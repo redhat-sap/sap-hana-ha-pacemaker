@@ -11,7 +11,9 @@
     dest: "{{ sap_hana_ha_pacemaker_fencing_device.password_file }}"
     content: 'echo "{{ sap_hana_ha_pacemaker_fencing_device.pwd }}"'
     mode: 0700
-
+  when:
+    - sap_hana_ha_pacemaker_fencing_device.password_file
+    
 - name: Enable stonith
   command: pcs property set stonith-enabled=true
   register: stonith
