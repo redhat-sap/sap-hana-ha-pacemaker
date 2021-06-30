@@ -37,14 +37,16 @@
     PREFER_SITE_TAKEOVER=true DUPLICATE_PRIMARY_TIMEOUT=7200 AUTOMATED_REGISTER=true \
     op start timeout=3600 \
     op stop timeout=3600 \
-    op monitor interval=61 role="Slave" timeout=700 \
-    op monitor interval=59 role="Master" timeout=700 \
+    op monitor interval=61 role=Slave timeout=700 \
+    op monitor interval=59 role=Master timeout=700 \
     op promote timeout=3600 \
     op demote timeout=3600 \
-    master notify=true clone-max=2 clone-node-max=1 interleave=true
+    {{ _thing }} notify=true clone-max=2 clone-node-max=1 interleave=true
   register: create_resource
   changed_when: "'Assumed agent name' in create_resource.stdout"
   run_once: true
+  vars:
+    _thing: "{{ 'master' if ansible_facts['distribution_major_version'] | int == 7 else 'promotable' }}"
 
 - name: Create Virtual IP resource
   shell: |
