@@ -39,11 +39,13 @@
 
 - name: Create RHEL HA Cluster
   command: |
-    pcs cluster setup --name {{ sap_hana_ha_pacemaker_cluster_name }} \
+    pcs cluster setup {{ _name }} {{ sap_hana_ha_pacemaker_cluster_name }} \
     {{ sap_hana_ha_pacemaker_node1_fqdn }} \
     {{ sap_hana_ha_pacemaker_node2_fqdn }} \
   register: create_cluster
   changed_when: "'Cluster has been successfully set up' in create_cluster.stdout"
+  vars:
+    _name: "{{ '--name' if ansible_facts['distribution_major_version'] | int == 7 else '' }}"
   run_once: true
 
 - name: Enable the RHEL HA Cluster
