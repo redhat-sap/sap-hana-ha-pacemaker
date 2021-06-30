@@ -28,13 +28,14 @@
 
 - name: Authenticate the cluster Nodes
   command: |
-    pcs {{ _subject }} auth --force \
+    pcs {{ _subject }} auth {{ _auth }}\
     {{ sap_hana_ha_pacemaker_node1_fqdn }} {{ sap_hana_ha_pacemaker_node2_fqdn }} \
     -u hacluster -p {{ sap_hana_ha_pacemaker_hacluster_password }}
   register: auth_cluster
   changed_when: "'Authorized' in auth_cluster.stdout"
   vars:
     _subject: "{{ 'cluster' if ansible_facts['distribution_major_version'] | int == 7 else 'host' }}"
+    _auth: "{{ '--auth' if ansible_facts['distribution_major_version'] | int == 7 else '' }}"
 
 - name: Create RHEL HA Cluster
   command: |
