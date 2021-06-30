@@ -13,7 +13,7 @@
     mode: 0700
   when:
     - sap_hana_ha_pacemaker_fencing_device.password_file
-    
+
 - name: Enable stonith
   command: pcs property set stonith-enabled=true
   register: stonith
@@ -47,7 +47,7 @@
     {{ password_frag }} pcmk_host_list={{ sap_hana_ha_pacemaker_fencing_device.pcmk_host_list }} op monitor interval=30
   when:
     - sap_hana_ha_pacemaker_fencing_device.type != "fence_azure_arm"
-    - not( sap_hana_ha_pacemaker_fencing_device.pcmk_host_list is none )
+    - not( sap_hana_ha_pacemaker_fencing_device.pcmk_host_list is undefined )
   register: stonith_device
   changed_when: "'error' not in stonith_device.stdout"
   run_once: true
@@ -59,7 +59,7 @@
     {{ password_frag }} pcmk_host_map={{ sap_hana_ha_pacemaker_fencing_device.pcmk_host_map }} op monitor interval=30
   when:
     - sap_hana_ha_pacemaker_fencing_device.type != "fence_azure_arm"
-    - not( sap_hana_ha_pacemaker_fencing_device.pcmk_host_map is none )
+    - not( sap_hana_ha_pacemaker_fencing_device.pcmk_host_map is undefined )
   register: stonith_device
   changed_when: "'error' not in stonith_device.stdout"
   run_once: true
