@@ -65,8 +65,11 @@
   run_once: true
 
 - name: Configure second link
-  command: pcs cluster link add node1={{ sap_hana_ha_pacemaker_node1_link2_ip }} node2={{ sap_hana_ha_pacemaker_node2_link2_ip }} options linknumber=2
+  command: pcs cluster link add {{ _nn1 }}={{ sap_hana_ha_pacemaker_node1_link2_ip }} {{ _nn2 }}={{ sap_hana_ha_pacemaker_node2_link2_ip }} options linknumber=2
   run_once: true
+  vars:
+    _nn1: "{{ sap_hana_ha_pacemaker_node1_fqdn.split('.')[0] }}"
+    _nn2: "{{ sap_hana_ha_pacemaker_node1_fqdn.split('.')[0] }}"
   when: 
     - sap_hana_ha_pacemaker_node1_link2_ip is defined 
     - sap_hana_ha_pacemaker_node2_link2_ip is defined
