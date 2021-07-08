@@ -50,7 +50,7 @@ The following variables are common to all fencing devices (except those on hyper
 | sap_hana_ha_pacemaker_fencing_device.pcmk_host_list |                          List of nodes controlled by the fencing device                          |   yes *   |
 | sap_hana_ha_pacemaker_fencing_device.password_file  | Full path and filename of file to have 'password script' to use for fencing device configuration |    no     |
 | sap_hana_ha_pacemaker_fencing_device.pcmk_host_map  |                             Mapping of the hostnames/ip of the nodes                             |   yes*    |
- 
+| sap_hana_ha_pacemaker_fencing_device.custom_options |  Additional options to pass to fence device creation, e.g. "ssl=1 ssl_insecure=1 power_wait=30"  |    no     |
 \* Must provide either a pcmk_host_list or a pcmk_host_map, per https://access.redhat.com/solutions/2619961 for a discussion on host_list vs host_map
 
 This is a list of the most common fencing devices:
