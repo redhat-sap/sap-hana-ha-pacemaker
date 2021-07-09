@@ -12,5 +12,6 @@ sap_hana_ha_pacemaker_e4s_repos_ppc64le: rhel-8-for-ppc64le-highavailability-e4s
 
 sap_hana_ha_pacemaker_cluster_name: "hana_cluster"
 
-
+sap_hana_ha_pacemaker_site_name_primary: Primary
+sap_hana_ha_pacemaker_site_name_secondary: Secondary
 

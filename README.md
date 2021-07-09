@@ -22,7 +22,7 @@ You can use the [redhat_sap.sap_rhsm](https://galaxy.ansible.com/redhat_sap/sap_
 |    sap_hana_ha_pacemaker_secondary_read    |                          Configure HANA second Node as Active/Read-Enabled                           |                 no (default false)                  |
 |         sap_hana_ha_pacemaker_vip          |                            Virtual IP used for the HANA clustered service                            |                         yes                         |
 |    sap_hana_ha_pacemaker_secondary_vip     | Virtual IP used for the HANA clustered service when second Node is configured as Active/Read-Enabled | only if sap_hana_ha_pacemaker_secondary_read 'true' |
-|  sap_hana_ha_pacemaker_configure_firewall  |                            Wheter to configure firewall rules for RHEL HA                            |                 no (default false)                  |
+|  sap_hana_ha_pacemaker_configure_firewall  |                           Whether to configure firewall rules for RHEL HA                            |                 no (default false)                  |
 |  sap_hana_ha_pacemaker_hacluster_password  |                              Password to be set up for 'hacluster' uset                              |                         yes                         |
 |     sap_hana_ha_pacemaker_cluster_name     |                               Name to be given to the RHEL HA Cluster                                |             no (default 'hana_cluster')             |
 |      sap_hana_ha_pacemaker_node1_fqdn      |         Fully qualified domain name for FIRST node of the cluster used for heartbeat traffic         |                         yes                         |
@@ -31,9 +31,11 @@ You can use the [redhat_sap.sap_rhsm](https://galaxy.ansible.com/redhat_sap/sap_
 |       sap_hana_ha_pacemaker_node2_ip       |                   IP if the SECOND node of the cluster used for heartbeat traffic                    |                         yes                         |
 |    sap_hana_ha_pacemaker_node1_link2_ip    |            IP if the FIRST node of the cluster used for heartbeat traffic for second link            |                         no*                         |
 |    sap_hana_ha_pacemaker_node2_link2_ip    |           IP if the SECOND node of the cluster used for heartbeat traffic for second link            |                         no*                         |
-|      sap_hana_ha_pacemaker_stickiness      |                               Wheter to configure resource-stickiness                                |                 no (default false)                  |
-|      sap_hana_ha_pacemaker_threshold       |                               Wheter to configure migration-threshold                                |                 no (default false)                  |
+|      sap_hana_ha_pacemaker_stickiness      |                               Whether to configure resource-stickiness                               |                 no (default false)                  |
+|      sap_hana_ha_pacemaker_threshold       |                               Whether to configure migration-threshold                               |                 no (default false)                  |
 |       sap_hana_ha_pacemaker_use_e4s        |                               Whether to use 'e4s' repositories or not                               |                  no (default true)                  |
+|  sap_hana_ha_pacemaker_site_name_primary   |                                       HANA "Primary" site name                                       |                         no                          |
+| sap_hana_ha_pacemaker_site_name_secondary  |                                      HANA "Secondary" site name                                      |                         no                          |
 
 \* if a second link is in use, IP addresses for both nodes must be provided
 
