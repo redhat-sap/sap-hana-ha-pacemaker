@@ -6,7 +6,7 @@
     path: /hana/shared/myHooks
     owner: "{{ sap_hana_ha_pacemaker_hana_sid }}adm"
     group: "sapsys"
-    type: directory
+    state: directory
 
 - name: Copy hook
   copy:
