@@ -5,7 +5,7 @@
   file:
     path: /hana/shared/myHooks
     owner: "{{ sap_hana_ha_pacemaker_hana_sid }}adm"
-    group: "{{ sapsys }}"
+    group: "sapsys"
     type: directory
 
 - name: Copy hook
@@ -13,7 +13,7 @@
     src: /usr/share/SAPHanaSR/srHook/SAPHanaSR.py 
     dest: /hana/shared/myHooks
     owner: "{{ sap_hana_ha_pacemaker_hana_sid }}adm"
-    group: "{{ sapsys }}"
+    group: "sapsys"
     
 - name: Update global.ini to use hook
   blockinfile:
@@ -30,6 +30,9 @@
 - name: Sudoers config
   copy:
     dest: /etc/sudoers.d/20-saphana
+    owner: root
+    group: root
+    mode: u=r
     content: |
       Cmnd_Alias DC1_SOK   = /usr/sbin/crm_attribute -n hana_{{ _sid }}_site_srHook_{{ _site1 }} -v SOK -t crm_config -s SAPHanaSR
       Cmnd_Alias DC1_SFAIL = /usr/sbin/crm_attribute -n hana_{{ _sid }}_site_srHook_{{ _site1 }} -v SFAIL -t crm_config -s SAPHanaSR
