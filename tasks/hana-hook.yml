@@ -4,7 +4,7 @@
 - name: Ensure hook dir exists
   file:
     path: /hana/shared/myHooks
-    owner: "{{ sap_hana_ha_pacemaker_hana_sid }}adm | lower"
+    owner: "{{ sap_hana_ha_pacemaker_hana_sid + 'adm' | lower }}"
     group: "sapsys"
     state: directory
 
@@ -12,7 +12,7 @@
   copy:
     src: /usr/share/SAPHanaSR/srHook/SAPHanaSR.py 
     dest: /hana/shared/myHooks
-    owner: "{{ sap_hana_ha_pacemaker_hana_sid }}adm | lower"
+    owner: "{{ sap_hana_ha_pacemaker_hana_sid + 'adm' | lower }}"
     group: "sapsys"
     
 - name: Update global.ini to use hook
