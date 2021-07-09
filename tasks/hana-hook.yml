@@ -10,7 +10,8 @@
 
 - name: Copy hook
   copy:
-    remote_src: /usr/share/SAPHanaSR/srHook/SAPHanaSR.py 
+    remote_src: yes
+    src: /usr/share/SAPHanaSR/srHook/SAPHanaSR.py 
     dest: /hana/shared/myHooks
     owner: "{{ (sap_hana_ha_pacemaker_hana_sid + 'adm') | lower }}"
     group: "sapsys"
