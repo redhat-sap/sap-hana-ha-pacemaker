@@ -25,6 +25,7 @@
     owner: root
     group: root
     mode:  '0744'
+    create: yes
     path: "/etc/systemd/system/corosync.service.d/override.conf"
     block: |
       [Service]
