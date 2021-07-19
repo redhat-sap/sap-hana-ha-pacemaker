@@ -24,7 +24,7 @@
   blockinfile:
     owner: root
     group: root
-    mode:  '0744'
+    mode:  '0644'
     create: yes
     path: "/etc/systemd/system/corosync.service.d/override.conf"
     block: |
@@ -74,7 +74,7 @@
   run_once: true
 
 - name: Start the RHEL HA Cluster
-  command: pcs cluster start --all
+  command: pcs cluster start --all --wait=600 --request-timeout=600
   register: start_cluster
   changed_when: "'Starting Cluster' in start_cluster.stdout"
   run_once: true
