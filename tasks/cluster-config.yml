@@ -73,6 +73,7 @@
   changed_when: "'Cluster Enabled' in enable_cluster.stdout"
   run_once: true
 
+  #did  systemd delay slow this down so it failed? Added timeouts
 - name: Start the RHEL HA Cluster
   command: pcs cluster start --all --wait=600 --request-timeout=600
   register: start_cluster
