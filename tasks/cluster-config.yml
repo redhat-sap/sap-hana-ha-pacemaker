@@ -12,6 +12,24 @@
     name: hacluster
     password: "{{ sap_hana_ha_pacemaker_hacluster_password | password_hash('sha512') }}"
 
+- name: Ensure /etc/systemd/system/corosync.service.d directory exists
+  file:
+    path: /etc/systemd/system/corosync.service.d
+    owner: root
+    group: root
+    state: directory
+    mode: '0755'
+
+- name:  Setup /etc/systemd/system/corosync.service.d/override.conf
+  blockinfile:
+    owner: root
+    group: root
+    mode:  '0744'
+    path: "/etc/systemd/system/corosync.service.d/override.conf"
+    block: |
+      [Service]
+      ExecStartPre=/bin/sleep 60
+
 - name: Ensure pcsd service is enabled
   systemd:
     name: pcsd.service
