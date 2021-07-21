@@ -12,6 +12,9 @@
     name: hacluster
     password: "{{ sap_hana_ha_pacemaker_hacluster_password | password_hash('sha512') }}"
 
+# For fenced nodes, they can come up too quickly, and like a zombie, be double tapped by pacemaker
+#   This delay might not be needed on less than super fast environments, but for now, is "always"
+#     TODO: Make this startup delay optional
 - name: Ensure /etc/systemd/system/corosync.service.d directory exists
   file:
     path: /etc/systemd/system/corosync.service.d
