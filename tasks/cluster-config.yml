@@ -12,28 +12,6 @@
     name: hacluster
     password: "{{ sap_hana_ha_pacemaker_hacluster_password | password_hash('sha512') }}"
 
-# For fenced nodes, they can come up too quickly, and like a zombie, be double tapped by pacemaker
-#   This delay might not be needed on less than super fast environments, but for now, is "always"
-#     TODO: Make this startup delay optional
-- name: Ensure /etc/systemd/system/corosync.service.d directory exists
-  file:
-    path: /etc/systemd/system/corosync.service.d
-    owner: root
-    group: root
-    state: directory
-    mode: '0755'
-
-- name:  Setup /etc/systemd/system/corosync.service.d/override.conf
-  blockinfile:
-    owner: root
-    group: root
-    mode:  '0644'
-    create: yes
-    path: "/etc/systemd/system/corosync.service.d/override.conf"
-    block: |
-      [Service]
-      ExecStartPre=/bin/sleep 60
-
 - name: Ensure pcsd service is enabled
   systemd:
     name: pcsd.service
@@ -93,3 +71,29 @@
   when: 
     - sap_hana_ha_pacemaker_node1_link2_ip is defined 
     - sap_hana_ha_pacemaker_node2_link2_ip is defined
+
+
+# For fenced nodes, they can come up too quickly, and like a zombie, be double tapped by pacemaker
+#   This delay might not be needed on less than super fast environments, but for now, is "always"
+#     TODO: Make this startup delay optional
+# Note: We enable this *after* the initial cluster setup/start, so we don't need to to have ansible know how to
+# wait on the initial, one time, startup.
+- name: Ensure /etc/systemd/system/corosync.service.d directory exists
+  file:
+    path: /etc/systemd/system/corosync.service.d
+    owner: root
+    group: root
+    state: directory
+    mode: '0755'
+
+- name:  Setup /etc/systemd/system/corosync.service.d/override.conf
+  blockinfile:
+    owner: root
+    group: root
+    mode:  '0644'
+    create: yes
+    path: "/etc/systemd/system/corosync.service.d/override.conf"
+    block: |
+      [Service]
+      ExecStartPre=/bin/sleep 60
+
