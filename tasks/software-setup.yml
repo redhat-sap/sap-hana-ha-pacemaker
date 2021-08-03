@@ -6,5 +6,4 @@
       - resource-agents-sap-hana
       - pcs
       - pacemaker
-      - fence-agents-all
     state: present
