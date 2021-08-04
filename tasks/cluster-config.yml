@@ -38,7 +38,7 @@
 
 - name: Create RHEL HA Cluster
   command: |
-    pcs cluster setup --name {{ sap_hana_ha_pacemaker_cluster_name }} \
+    pcs cluster setup {{ sap_hana_ha_pacemaker_cluster_name }} \
     {{ sap_hana_ha_pacemaker_node1_fqdn }} \
     {{ sap_hana_ha_pacemaker_node2_fqdn }} \
   register: create_cluster
