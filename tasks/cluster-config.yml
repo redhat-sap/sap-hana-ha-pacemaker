@@ -28,7 +28,7 @@
 
 - name: Authenticate the cluster Nodes
   command: |
-    pcs {{ _subject }} auth --force \
+    pcs {{ _subject }} auth \
     {{ sap_hana_ha_pacemaker_node1_fqdn }} {{ sap_hana_ha_pacemaker_node2_fqdn }} \
     -u hacluster -p {{ sap_hana_ha_pacemaker_hacluster_password }}
   register: auth_cluster
