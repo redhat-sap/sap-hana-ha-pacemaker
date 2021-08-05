@@ -41,7 +41,7 @@
     op monitor interval=59 role="Master" timeout=700 \
     op promote timeout=3600 \
     op demote timeout=3600 \
-    master notify=true clone-max=2 clone-node-max=1 interleave=true
+    promotable notify=true clone-max=2 clone-node-max=1 interleave=true
   register: create_resource
   changed_when: "'Assumed agent name' in create_resource.stdout"
   run_once: true
