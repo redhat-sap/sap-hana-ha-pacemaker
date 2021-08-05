@@ -7,3 +7,5 @@
 - import_tasks: cluster-config.yml
 - import_tasks: cluster-resources.yml
 - import_tasks: fencing-config.yml
+  when:
+    - sap_hana_ha_pacemaker_fencing_device.name
