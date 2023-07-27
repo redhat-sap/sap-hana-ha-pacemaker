@@ -3,6 +3,9 @@
 - import_tasks: eval-arch.yml
 - import_tasks: enable-repos.yml
 - import_tasks: software-setup.yml
+- import_tasks: hana-hook.yml
 - import_tasks: cluster-config.yml
 - import_tasks: cluster-resources.yml
 - import_tasks: fencing-config.yml
+  when:
+    - sap_hana_ha_pacemaker_fencing_device.name

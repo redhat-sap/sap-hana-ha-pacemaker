@@ -1,0 +1,46 @@
+---
+# handle https://access.redhat.com/articles/3004101 step 4.2, 
+
+- name: Ensure hook dir exists
+  file:
+    path: /hana/shared/myHooks
+    owner: "{{ (sap_hana_ha_pacemaker_hana_sid + 'adm') | lower }}"
+    group: "sapsys"
+    state: directory
+
+- name: Copy hook
+  copy:
+    remote_src: yes
+    src: /usr/share/SAPHanaSR/srHook/SAPHanaSR.py 
+    dest: /hana/shared/myHooks
+    owner: "{{ (sap_hana_ha_pacemaker_hana_sid + 'adm') | lower }}"
+    group: "sapsys"
+    
+- name: Update global.ini to use hook
+  blockinfile:
+    path: "/hana/shared/{{ sap_hana_ha_pacemaker_hana_sid }}/global/hdb/custom/config/global.ini"
+    block: |
+      [ha_dr_provider_SAPHanaSR]
+      provider = SAPHanaSR
+      path = /hana/shared/myHooks
+      execution_order = 1
+
+      [trace]
+      ha_dr_saphanasr = info
+
+- name: Sudoers config
+  copy:
+    dest: /etc/sudoers.d/20-saphana
+    owner: root
+    group: root
+    mode: u=r
+    content: |
+      Cmnd_Alias DC1_SOK   = /usr/sbin/crm_attribute -n hana_{{ _sid }}_site_srHook_{{ _site1 }} -v SOK -t crm_config -s SAPHanaSR
+      Cmnd_Alias DC1_SFAIL = /usr/sbin/crm_attribute -n hana_{{ _sid }}_site_srHook_{{ _site1 }} -v SFAIL -t crm_config -s SAPHanaSR
+      Cmnd_Alias DC2_SOK   = /usr/sbin/crm_attribute -n hana_{{ _sid }}_site_srHook_{{ _site2 }} -v SOK -t crm_config -s SAPHanaSR
+      Cmnd_Alias DC2_SFAIL = /usr/sbin/crm_attribute -n hana_{{ _sid }}_site_srHook_{{ _site2 }} -v SFAIL -t crm_config -s SAPHanaSR
+      {{ _sid }}adm ALL=(ALL) NOPASSWD: DC1_SOK, DC1_SFAIL, DC2_SOK, DC2_SFAIL
+  vars:
+    _sid: "{{ sap_hana_ha_pacemaker_hana_sid | lower }}"
+    _site1: "{{ sap_hana_ha_pacemaker_site_name_primary }}"
+    _site2: "{{ sap_hana_ha_pacemaker_site_name_secondary }}"
